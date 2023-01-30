@@ -43,15 +43,23 @@ namespace TetrisCsharp.Shapes
         };
         private int currentRotation = 0;
         private bool painted = false;
+        private bool ableToMoveLeft = false;
+        private bool ableToMoveRight = true;
+        private bool atTheBottom = false;
 
         public L() { }
 
-        public void Rotate()
+        public override void Rotate()
         {
             if (currentRotation < 3)
             {
                 currentRotation++;
                 table = changeTable(table, rotations, currentRotation);
+            }
+            else
+            {
+                currentRotation = -1;
+                Rotate();
             }
         }
 
@@ -60,19 +68,27 @@ namespace TetrisCsharp.Shapes
             this.PrintShape(this.table);
         }
 
-        public int[,] getTable()
+        public override int[,] getTable()
         {
             return this.table;
         }
 
-        public bool getPainted()
+        public override bool getPainted()
         {
             return this.painted;
         }
 
-        public void setPainted(bool painted)
+        public override void setPainted(bool painted)
         {
             this.painted = painted;
         }
+
+        public override void setAtTheBottom() { this.atTheBottom = true; }
+
+        public override bool getAbleToMoveLeft() { return ableToMoveLeft; }
+        public override bool getAbleToMoveRight() { return ableToMoveRight; }
+        public override bool getAtTheBottom() { return atTheBottom; }
+        public override void setAbleToMoveLeft(bool ableToMoveLeft) { this.ableToMoveLeft = ableToMoveLeft; }
+        public override void setAbleToMoveRight(bool ableToMoveRight) { this.ableToMoveRight = ableToMoveRight; }
     }
 }

@@ -16,13 +16,14 @@ namespace TetrisCsharp
 {
     public partial class Form1 : Form
     {
-        private T l = new T();
+        private Shapes.Shapes currentShape = new L();
         List<PictureBox> pictureBoxes;
         private int movingIndex = -1;
         private int rowMovingIndex = -1;
         private const char LEFT = 'a';
         private const char RIGHT = 'd';
         private const char ROTATE = 'w';
+        private const char DOWN = 's';
         public Form1()
         {
             
@@ -45,9 +46,9 @@ namespace TetrisCsharp
             {
                 if (CheckIfNotOutsideOfBoundsAfterMoveDown())
                 {
-                    RefreshTileImages(l.getTable());
+                    RefreshTileImages(currentShape.getTable());
                     rowMovingIndex++;
-                    PaintShape(l.getTable());
+                    PaintShape(currentShape.getTable());
                 } else
                 {
                     
@@ -62,15 +63,53 @@ namespace TetrisCsharp
             int[] yCoordinates = new int[4];
             for (int i = 0; i < 4; i++)
             {
-                yCoordinates[i] = l.getTable()[i, 0];
+                yCoordinates[i] = currentShape.getTable()[i, 0];
             }
             int biggestYCoordinate = yCoordinates.Max();
             if ( biggestYCoordinate + rowMovingIndex >= 19)
             {
-                l.setAtTheBottom();
+                currentShape.setAtTheBottom();
+                movingIndex = -1;
+                rowMovingIndex = -1;
+                GenerateRandomShape();
                 return false;
             }
             return true;
+        }
+
+        private void GenerateRandomShape()
+        {
+            Random random = new Random();
+            int randomShapeNumber = random.Next(0, 7);
+            switch(randomShapeNumber)
+            {
+                case 0:
+                    currentShape = new L();
+                    break;
+                case 1:
+                    currentShape = new rL();
+                    break;
+                case 2:
+                    currentShape = new Box();
+                    break;
+                case 3:
+                    currentShape = new Line();
+                    break;
+                case 4:
+                    currentShape = new S();
+                    break;
+                case 5:
+                    currentShape = new Z();
+                    break;
+                case 6:
+                    currentShape = new T();
+                    break;
+            }
+            timer1 = new Timer();
+            timer1.Tick += new EventHandler(GameEventHandler);
+            timer1.Interval = 1000;
+            timer1.Start();
+            PaintShape(currentShape.getTable());
         }
 
         //TODO: Rotation
@@ -86,6 +125,12 @@ namespace TetrisCsharp
                         break;
                     case RIGHT:
                         MoveToRight();
+                        break;
+                    case ROTATE:
+                        Rotate();
+                        break;
+                    case DOWN:
+                        MoveDown();
                         break;
                     
                 }
@@ -108,32 +153,52 @@ namespace TetrisCsharp
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
-            if (!l.getPainted()) {
-                PaintShape(l.getTable());
-                l.setPainted(true);
+            if (!currentShape.getPainted()) {
+                PaintShape(currentShape.getTable());
+                currentShape.setPainted(true);
             }  
-            l.setPainted(true);
+            currentShape.setPainted(true);
         }
 
         private void MoveToRight()
         {
             CheckIfNotOutsideOfBoundsWhileMovingSideways();
-            if (l.getAbleToMoveRight() && !l.getAtTheBottom())
+            if (currentShape.getAbleToMoveRight() && !currentShape.getAtTheBottom())
             {
-                RefreshTileImages(l.getTable());
+                RefreshTileImages(currentShape.getTable());
                 movingIndex++;
-                PaintShape(l.getTable());
+                PaintShape(currentShape.getTable());
             }
         }
 
         private void MoveToLeft()
         {
             CheckIfNotOutsideOfBoundsWhileMovingSideways();
-            if (l.getAbleToMoveLeft() && !l.getAtTheBottom())
+            if (currentShape.getAbleToMoveLeft() && !currentShape.getAtTheBottom())
             {
-                RefreshTileImages(l.getTable());
+                RefreshTileImages(currentShape.getTable());
                 movingIndex--;
-                PaintShape(l.getTable());
+                PaintShape(currentShape.getTable());
+            }
+        }
+
+        private void Rotate()
+        {
+            if (!currentShape.getAtTheBottom())
+            {
+                RefreshTileImages(currentShape.getTable());
+                currentShape.Rotate();
+                PaintShape(currentShape.getTable());
+            }
+        }
+
+        private void MoveDown()
+        {
+            if (!currentShape.getAtTheBottom())
+            {
+                RefreshTileImages(currentShape.getTable());
+                rowMovingIndex++;
+                PaintShape(currentShape.getTable());
             }
         }
 
@@ -151,23 +216,23 @@ namespace TetrisCsharp
             int[] xCoordinates = new int[4];
             for (int i = 0; i < 4; i++)
             {
-                xCoordinates[i] = l.getTable()[i, 1];
+                xCoordinates[i] = currentShape.getTable()[i, 1];
             }
             int smallestCoordinate = xCoordinates.Min();
             int biggestCoordinate = xCoordinates.Max();
             if (smallestCoordinate + movingIndex < 1)
             {
-                l.setAbleToMoveLeft(false);
+                currentShape.setAbleToMoveLeft(false);
             } else
             {
-                l.setAbleToMoveLeft(true);
+                currentShape.setAbleToMoveLeft(true);
             }
             if (biggestCoordinate + movingIndex > 8)
             {
-                l.setAbleToMoveRight(false);
+                currentShape.setAbleToMoveRight(false);
             } else
             {
-                l.setAbleToMoveRight(true);
+                currentShape.setAbleToMoveRight(true);
             }
         }
     }

@@ -50,31 +50,35 @@ namespace TetrisCsharp.Shapes
 
         public T() { }
 
-        public int[,] getTable() { return table; }
+        public override int[,] getTable() { return table; }
 
-        public bool getPainted() { return isPainted; }
+        public override bool getPainted() { return isPainted; }
 
-        public void setPainted(bool isPainted) { this.isPainted = isPainted; }
+        public override void setPainted(bool isPainted) { this.isPainted = isPainted; }
 
-        public void Rotate()
+        public override void Rotate()
         {
             if (currentRotation < 3)
             {
                 currentRotation++;
                 table = changeTable(table, rotations, currentRotation);
+            } else
+            {
+                currentRotation = -1;
+                Rotate();
             }
         }
 
-        public bool getAbleToMoveLeft() { return ableToMoveLeft; }
+        public override bool getAbleToMoveLeft() { return ableToMoveLeft; }
 
-        public bool getAbleToMoveRight() { return ableToMoveRight; }
+        public override bool getAbleToMoveRight() { return ableToMoveRight; }
 
-        public void setAbleToMoveLeft(bool ableToMoveLeft) { this.ableToMoveLeft = ableToMoveLeft; }
+        public override void setAbleToMoveLeft(bool ableToMoveLeft) { this.ableToMoveLeft = ableToMoveLeft; }
 
-        public void setAbleToMoveRight(bool ableToMoveRight) { this.ableToMoveRight = ableToMoveRight; }
+        public override void setAbleToMoveRight(bool ableToMoveRight) { this.ableToMoveRight = ableToMoveRight; }
 
-        public bool getAtTheBottom() { return atTheBottom; }
+        public override bool getAtTheBottom() { return atTheBottom; }
 
-        public void setAtTheBottom() { this.atTheBottom = true; }
+        public override void setAtTheBottom() { this.atTheBottom = true; }
     }
 }

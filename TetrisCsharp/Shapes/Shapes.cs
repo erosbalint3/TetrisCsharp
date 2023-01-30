@@ -7,7 +7,7 @@ using System.Drawing.Drawing2D;
 
 namespace TetrisCsharp.Shapes
 {
-    internal class Shapes
+    public abstract class Shapes
     {
         public Shapes() { }
 
@@ -35,5 +35,20 @@ namespace TetrisCsharp.Shapes
             }
             return temp;
         }
+
+        public abstract int[,] getTable();
+
+        public abstract void setAtTheBottom();
+
+        public abstract bool getPainted();
+        public abstract void setPainted(bool isPainted);
+
+        public abstract bool getAbleToMoveLeft();
+        public abstract bool getAbleToMoveRight();
+        public abstract void setAbleToMoveRight(bool ableToMoveRight);
+        public abstract void setAbleToMoveLeft(bool ableToMoveLeft);
+        public abstract bool getAtTheBottom();
+        public abstract void Rotate();
+        
     }
 }
