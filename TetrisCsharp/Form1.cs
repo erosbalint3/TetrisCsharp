@@ -11,6 +11,7 @@ using TetrisCsharp.Shapes;
 using System.Windows.Input;
 using System.Security.Cryptography.X509Certificates;
 using System.Runtime.InteropServices;
+using System.Drawing.Text;
 
 namespace TetrisCsharp
 {
@@ -24,6 +25,7 @@ namespace TetrisCsharp
         private const char RIGHT = 'd';
         private const char ROTATE = 'w';
         private const char DOWN = 's';
+        private Bitmap tile = new Bitmap(@"tile2.png");
         public Form1()
         {
             
@@ -44,6 +46,10 @@ namespace TetrisCsharp
             }
             else
             {
+                if (CheckIfBottomLineIsFull())
+                {
+                    DrawIfBottomLineIsFull();
+                }
                 if (CheckIfNotOutsideOfBoundsAfterMoveDown())
                 {
                     RefreshTileImages(currentShape.getTable());
@@ -51,7 +57,6 @@ namespace TetrisCsharp
                     PaintShape(currentShape.getTable());
                 } else
                 {
-                    
                     timer1.Stop();
                 }
                 
@@ -146,7 +151,7 @@ namespace TetrisCsharp
         {
             for (int i = 0; i < shape.GetLength(0); i++)
             {
-                pictureBoxes[((shape[i, 0] + rowMovingIndex) * 10) + shape[i, 1] + movingIndex].Image = new Bitmap(@"tile2.png");               
+                pictureBoxes[((shape[i, 0] + rowMovingIndex) * 10) + shape[i, 1] + movingIndex].Image = tile;               
             }
             tableLayoutPanel1.Refresh();
         }
@@ -234,6 +239,46 @@ namespace TetrisCsharp
             {
                 currentShape.setAbleToMoveRight(true);
             }
+        }
+
+        private bool CheckIfBottomLineIsFull()
+        {
+            bool full = false;
+            for (int i = 190; i < 200; i++)
+            {
+                if (pictureBoxes[i].Image == tile)
+                {
+                    full = true;
+                } 
+                else
+                {
+                    return false;
+                }
+            }
+            return full;
+        }
+
+        private void DrawIfBottomLineIsFull()
+        {
+            for (int i = 190; i < 200; i++)
+            {
+                pictureBoxes[i].Image = null;
+                tableLayoutPanel1.Refresh();
+            }
+            for (int i = 199; i > 9; i--)
+            {
+                if (pictureBoxes[i - 10].Image == tile)
+                {
+                    pictureBoxes[i].Image = tile;
+                    pictureBoxes[i - 10].Image = null;
+                }
+            }
+            tableLayoutPanel1.Refresh();
+        }
+
+        private void j2pictureBox93_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

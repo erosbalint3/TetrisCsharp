@@ -1363,6 +1363,7 @@
             this.j2pictureBox93.Size = new System.Drawing.Size(34, 34);
             this.j2pictureBox93.TabIndex = 92;
             this.j2pictureBox93.TabStop = false;
+            this.j2pictureBox93.Click += new System.EventHandler(this.j2pictureBox93_Click);
             // 
             // j1pictureBox92
             // 
